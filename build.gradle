@@ -16,44 +16,19 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'pdfium-android'
-
-    publishedGroupId = 'com.github.barteksc'
-    libraryName = 'PdfiumAndroid'
-    artifact = 'pdfium-android'
-
-    libraryDescription = 'Fork of library for rendering PDFs on Android\'s Surface or Bitmap'
-
-    siteUrl = 'https://github.com/barteksc/PdfiumAndroid'
-    gitUrl = 'https://github.com/barteksc/PdfiumAndroid.git'
-
-    libraryVersion = '1.9.0'
-
-    developerId = 'barteksc'
-    developerName = 'Bartosz Schiller'
-    developerEmail = 'barteksch@boo.pl'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
 android {
+    namespace = "com.shockwave.pdfium"
     compileSdk 34
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 34
-        versionCode 1
-        versionName "1.9.0"
+        minSdk 21
+        targetSdk 34
         buildConfigField "String", "VERSION_NAME", "\"${versionName}\""
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
         }
     }
 
@@ -66,17 +41,20 @@ android {
     buildFeatures {
         buildConfig = true
     }
-    namespace = "com.shockwave.pdfium"
 }
-
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.findByName('release')
                 groupId = 'com.github.shaheer-oncoassist'
                 artifactId = 'PdfiumAndroid-sdk34'
-                version = '1.0.0'
+                version = '1.0.3'
+
+                // ✅ Ensure the AAR is built first
+                artifact("$buildDir/outputs/aar/${project.name}-release.aar") {
+                    builtBy(tasks.named("bundleReleaseAar")) // 🔹 Ensure AAR is built first
+                }
+
                 pom {
                     name = 'PdfiumAndroid-sdk34'
                     description = 'Fork of PdfiumAndroid with SDK 34 compatibility'
