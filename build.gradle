@@ -77,6 +77,17 @@ afterEvaluate {
                 groupId = 'com.github.shaheer-oncoassist'
                 artifactId = 'PdfiumAndroid-sdk34'
                 version = '1.0.0'
+                pom {
+                    name = 'PdfiumAndroid-sdk34'
+                    description = 'Fork of PdfiumAndroid with SDK 34 compatibility'
+                    url = 'https://github.com/shaheer-oncoassist/PdfiumAndroid-sdk34'
+                    licenses {
+                        license {
+                            name = 'Apache-2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                }
             }
         }
     }
